@@ -6,10 +6,19 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from sklearn.metrics import accuracy_score
+
 from xgboost import XGBClassifier
+from flask import Flask, request
+
+
+
+app = Flask(__name__)
+
 
 class Main:
+
     def __init__(self):
+
         # Init
         dataset_path, separator = [os.path.join('model', "dataset.txt"), "   "]
         # Load and Train model
@@ -17,7 +26,6 @@ class Main:
         self.vectorizer = None
         self.score = None
         self.model = None
-        self.train()
         
         
     def train(self):
@@ -34,6 +42,7 @@ class Main:
         self.vectorizer.fit(sentences_train)
         X_train = self.vectorizer.transform(sentences_train)
         X_test  = self.vectorizer.transform(sentences_test)
+
 
         # Init model and fit it
         self.model = XGBClassifier(max_depth=2, n_estimators=30)
@@ -63,12 +72,26 @@ class Main:
 
         return json.dumps({"sentiment": sentiment, "text": json_text})
 
+# init
+main = Main()
 
+@app.route('/')
+def index():
+    return "Sentiment Analysis API"
 
+@app.route('/train')
+def train():
+    main.train()
+    return "Model trained"
 
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.json
+    return main.predict(data['text'])
 
 if __name__ == "__main__":
-    main = Main()
-    print(main.predict("Depuis ce matin votre application ne marche pas, je n'arrive pas à déverrouiller ma voiture."))
-    print(main.predict("j'ai adore la prestation"))
+
+    app.run(host='0.0.0.0', port=80)
+    #print(main.predict("Depuis ce matin votre application ne marche pas, je n'arrive pas à déverrouiller ma voiture."))
+    #print(main.predict("j'ai adore la prestation"))
 
