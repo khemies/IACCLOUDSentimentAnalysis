@@ -15,4 +15,4 @@ RUN pip install -r requirements.txt
 EXPOSE 80
 
 # Lancer le script
-CMD ["python3", "app.py"]
+CMD ["python3", "main.py"]
