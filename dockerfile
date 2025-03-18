@@ -5,14 +5,14 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copier les fichiers nécessaires
-Run apt-get update
+RUN apt-get update
 COPY . .
 
 # Installer les dépendances
 RUN pip install -r requirements.txt
 
 # Exposer le port (optionnel si c'est une API)
-EXPOSE 80
+EXPOSE 8080
 
 # Lancer le script
 CMD ["python3", "main.py"]

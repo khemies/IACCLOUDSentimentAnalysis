@@ -91,7 +91,7 @@ def predict():
 
 if __name__ == "__main__":
 
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=8080)
     #print(main.predict("Depuis ce matin votre application ne marche pas, je n'arrive pas à déverrouiller ma voiture."))
     #print(main.predict("j'ai adore la prestation"))
 
